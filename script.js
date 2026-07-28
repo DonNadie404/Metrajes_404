@@ -42,7 +42,7 @@
     source.textContent = 'YouTube';
     const found = document.createElement('span');
     found.className = 'foundby';
-    found.textContent = 'Found by: ' + (video.foundBy || 'Unknown');
+    found.textContent = 'Encontrado por: ' + (video.foundBy || 'Desconocido');
 
     info.appendChild(title);
     info.appendChild(source);
@@ -74,7 +74,7 @@
     const base = 'https://www.youtube-nocookie.com/embed/';
     modalPlayer.src = base + encodeURIComponent(videoId) + '?rel=0&autoplay=1';
     modalTitle.textContent = title || '';
-    modalFoundBy.textContent = foundBy ? ('Found by: ' + foundBy) : '';
+    modalFoundBy.textContent = foundBy ? ('Encontrado por: ' + foundBy) : '';
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
