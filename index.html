@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RetroTube — Video (placeholder)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Retro<span>Tube</span></div>
+      <form id="searchForm" class="search" onsubmit="return false;">
+        <input id="searchInput" type="text" placeholder="Search" />
+        <button>Search</button>
+      </form>
+    </div>
+    <nav class="userlinks">
+      <a href="#">Upload</a>
+      <a href="#">Sign in</a>
+    </nav>
+  </header>
+
+  <main class="site">
+    <div class="maincol">
+      <section class="playerwrap">
+        <!-- Placeholder video (public sample) -->
+        <video id="player" width="640" controls poster="https://picsum.photos/640/360?seed=poster">
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </section>
+
+      <h1 id="videoTitle">Sample Video — A Retro Demo</h1>
+
+      <div class="meta">
+        <div class="leftmeta">
+          <span id="views">0 views</span> • <span class="date">Jul 28, 2008</span>
+        </div>
+        <div class="rightmeta">
+          <button id="likeBtn" class="btn">Like</button>
+          <button id="dislikeBtn" class="btn">Dislike</button>
+        </div>
+      </div>
+
+      <section class="desc">
+        <strong>Uploaded by</strong> RetroUploader • <a href="#">Subscribe</a>
+        <p id="description">This is a nostalgic mock of YouTube from 2008 — replace text with a real description.</p>
+      </section>
+
+      <section class="comments">
+        <h2>Comments (<span id="commentsCount">0</span>)</h2>
+        <form id="commentForm" onsubmit="return false;">
+          <textarea id="commentText" placeholder="Add a public comment..." rows="3"></textarea>
+          <button id="postComment" type="button">Post Comment</button>
+        </form>
+        <ul id="commentList" class="commentList">
+          <!-- comments appended here -->
+        </ul>
+      </section>
+    </div>
+
+    <aside class="sidecol">
+      <h3>Related Videos</h3>
+      <ul id="relatedList" class="relatedList">
+        <li class="relatedItem" data-src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" data-poster="https://picsum.photos/320/180?seed=rel1">
+          <img src="https://picsum.photos/120/68?seed=thumb1" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">Flower — Demo Clip</div>
+            <div class="rmeta">12,345 views</div>
+          </div>
+        </li>
+        <li class="relatedItem" data-src="https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" data-poster="https://picsum.photos/320/180?seed=rel2">
+          <img src="https://picsum.photos/120/68?seed=thumb2" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">Big Buck Bunny</div>
+            <div class="rmeta">3,210 views</div>
+          </div>
+        </li>
+      </ul>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
