@@ -1,11 +1,11 @@
 // Render the main grid and handle modal playback; prevents duplicate videos
 (function(){
-  // Videos provided earlier by the user (unique list) — updated thumbnail for Username:666 uses YouTube thumbnail
+  // Videos provided earlier by the user (unique list) — updated thumbnail for Username:666 uses original provided thumb
   const videos = [
     { id: 'b89CnP0Iq30', title: 'La Caída de Edgar', thumb: 'https://tvazteca.brightspotcdn.com/87/a7/cd0e1101486f8643400312dce073/edgar-se-cae.jpg' },
     { id: 'HyikGa6hObA', title: 'muñeca mueve cabeza', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd5SPrrnpVE2w-uekr8nOQIAdbHW_0C55tcmlgt-KUgg&s=10' },
-    // Username:666 thumb replaced with YouTube thumbnail for 7iFXyLah2oQ
-    { id: '7iFXyLah2oQ', title: 'Username:666', thumb: 'https://i.ytimg.com/vi/7iFXyLah2oQ/maxresdefault.jpg' },
+    // Username:666 thumb restored to the original URL provided by you
+    { id: '7iFXyLah2oQ', title: 'Username:666', thumb: 'https://i.ytimg.com/vi/OgfPcfS8s7U/maxresdefault.jpg' },
     { id: 'VHSdTFbU3Ts', title: '1980s PSA - “We\'re Not Candy!”', thumb: 'https://laughingsquid.com/wp-content/uploads/2014/08/were-not-candy-bizarre-1983-psa.jpg' },
     { id: '9C_HReR_McQ', title: "Don't Hug Me I'm Scared", thumb: 'https://images.squarespace-cdn.com/content/v1/569eeab4a128e6f9904daa89/1543947568466-AEGF6QVYXSITVFVDS6ZJ/download.jpg' },
     { id: 'EIv8Q551NRM', title: 'Mereana Mordegard Glesgorv', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbTGn8CKk506C4OYp4jvVocIpAihziqmiznWtCckn2Gw&s=10' }
