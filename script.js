@@ -1,6 +1,7 @@
-// Basic interactions: view increment, like/dislike, comments, related-item click
+// Interactions updated to support YouTube iframe player and your provided video IDs
 (function(){
-  const player = document.getElementById('player');
+  const player = document.getElementById('player'); // iframe
+  const playOverlay = document.getElementById('playOverlay');
   const viewsEl = document.getElementById('views');
   const likeBtn = document.getElementById('likeBtn');
   const dislikeBtn = document.getElementById('dislikeBtn');
@@ -10,7 +11,7 @@
   const relatedList = document.getElementById('relatedList');
   const postBtn = document.getElementById('postComment');
 
-  if (!player) return console.warn('Video element not found.');
+  if (!player) return console.warn('Player iframe not found.');
 
   // Simple state (in-memory)
   let views = 1234; // initial sample
@@ -23,7 +24,6 @@
     {author:'Bob', text:'Brings back memories.', time: new Date().toLocaleString()}
   ];
 
-  // render helpers
   function renderViews(){ if (viewsEl) viewsEl.textContent = views + ' views'; }
   function renderButtons(){
     if (!likeBtn || !dislikeBtn) return;
@@ -43,13 +43,42 @@
     commentsCount.textContent = comments.length;
   }
 
-  // interactions
-  player.addEventListener('play', ()=>{
-    // increment views once per page load when user plays
-    if(!player.dataset.viewed){
+  // Helper: set iframe to a YouTube video ID and optionally autoplay
+  function setYouTubeVideo(videoId, autoplay){
+    if (!videoId) return;
+    const base = 'https://www.youtube-nocookie.com/embed/';
+    const params = '?rel=0';
+    const auto = autoplay ? '&autoplay=1' : '';
+    player.src = base + encodeURIComponent(videoId) + params + auto;
+  }
+
+  // Play overlay: when clicked, start playback with autoplay and count as a view
+  if (playOverlay){
+    playOverlay.addEventListener('click', ()=>{
+      // if the iframe already had autoplay, this will still refresh it
+      // set autoplay and increment views
+      const srcId = (player.src || '').split('/embed/')[1] || '';
+      const vid = srcId.split('?')[0];
+      setYouTubeVideo(vid, true);
       views++;
-      player.dataset.viewed = '1';
       renderViews();
+      playOverlay.style.display = 'none';
+    });
+  }
+
+  // related video clicking: swap iframe src to the selected YouTube ID and autoplay
+  if (relatedList) relatedList.addEventListener('click', (e)=>{
+    const item = e.target.closest('.relatedItem');
+    if(!item) return;
+    const vid = item.dataset.videoId;
+    if (vid){
+      setYouTubeVideo(vid, true);
+      // update title
+      const rtitle = item.querySelector('.rtitle');
+      if (rtitle) document.getElementById('videoTitle').textContent = rtitle.textContent;
+      views = Math.floor(Math.random()*50000);
+      renderViews();
+      if (playOverlay) playOverlay.style.display = 'none';
     }
   });
 
@@ -73,32 +102,8 @@
     renderComments();
   });
 
-  // related video clicking: swap source and poster
-  if (relatedList) relatedList.addEventListener('click', (e)=>{
-    const item = e.target.closest('.relatedItem');
-    if(!item) return;
-    const src = item.dataset.src;
-    const poster = item.dataset.poster;
-    if(src){
-      player.pause();
-      // update source element(s)
-      const sourceEl = player.querySelector('source');
-      if (sourceEl) sourceEl.src = src;
-      if(poster) player.poster = poster;
-      player.load();
-      player.play().catch(()=>{ /* autoplay may be blocked */});
-      // update title and metadata minimally
-      const rtitle = item.querySelector('.rtitle');
-      if (rtitle) document.getElementById('videoTitle').textContent = rtitle.textContent;
-      views = Math.floor(Math.random()*50000);
-      renderViews();
-    }
-  });
-
-  // escape helper
   function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-  // initial render
   renderViews();
   renderButtons();
   renderComments();

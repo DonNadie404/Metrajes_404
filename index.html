@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RetroTube — Video (placeholder)</title>
+  <title>RetroTube — Video (your videos)</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -24,14 +24,14 @@
   <main class="site">
     <div class="maincol">
       <section class="playerwrap">
-        <!-- Placeholder video (public sample) -->
-        <video id="player" width="640" controls poster="https://picsum.photos/640/360?seed=poster">
-          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+        <!-- YouTube embed player. The first video from your list is used as the initial video -->
+        <div class="videoContainer">
+          <iframe id="player" width="640" height="360" src="https://www.youtube-nocookie.com/embed/b89CnP0Iq30" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <button id="playOverlay" class="playOverlay">Play</button>
+        </div>
       </section>
 
-      <h1 id="videoTitle">Sample Video — A Retro Demo</h1>
+      <h1 id="videoTitle">La Caída de Edgar</h1>
 
       <div class="meta">
         <div class="leftmeta">
@@ -45,7 +45,7 @@
 
       <section class="desc">
         <strong>Uploaded by</strong> RetroUploader • <a href="#">Subscribe</a>
-        <p id="description">This is a nostalgic mock of YouTube from 2008 — replace text with a real description.</p>
+        <p id="description">This page now uses your provided YouTube videos. Click Play to start.</p>
       </section>
 
       <section class="comments">
@@ -63,18 +63,51 @@
     <aside class="sidecol">
       <h3>Related Videos</h3>
       <ul id="relatedList" class="relatedList">
-        <li class="relatedItem" data-src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" data-poster="https://picsum.photos/320/180?seed=rel1">
-          <img src="https://picsum.photos/120/68?seed=thumb1" alt="thumb">
+        <li class="relatedItem" data-video-id="b89CnP0Iq30">
+          <img src="https://tvazteca.brightspotcdn.com/87/a7/cd0e1101486f8643400312dce073/edgar-se-cae.jpg" alt="thumb">
           <div class="rinfo">
-            <div class="rtitle">Flower — Demo Clip</div>
-            <div class="rmeta">12,345 views</div>
+            <div class="rtitle">La Caída de Edgar</div>
+            <div class="rmeta">YouTube</div>
           </div>
         </li>
-        <li class="relatedItem" data-src="https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" data-poster="https://picsum.photos/320/180?seed=rel2">
-          <img src="https://picsum.photos/120/68?seed=thumb2" alt="thumb">
+
+        <li class="relatedItem" data-video-id="HyikGa6hObA">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd5SPrrnpVE2w-uekr8nOQIAdbHW_0C55tcmlgt-KUgg&s=10" alt="thumb">
           <div class="rinfo">
-            <div class="rtitle">Big Buck Bunny</div>
-            <div class="rmeta">3,210 views</div>
+            <div class="rtitle">muñeca mueve cabeza</div>
+            <div class="rmeta">YouTube</div>
+          </div>
+        </li>
+
+        <li class="relatedItem" data-video-id="7iFXyLah2oQ">
+          <img src="https://i.ytimg.com/vi/OgfPcfS8s7U/maxresdefault.jpg" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">Username:666</div>
+            <div class="rmeta">YouTube</div>
+          </div>
+        </li>
+
+        <li class="relatedItem" data-video-id="VHSdTFbU3Ts">
+          <img src="https://laughingsquid.com/wp-content/uploads/2014/08/were-not-candy-bizarre-1983-psa.jpg" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">1980s PSA - “We're Not Candy!”</div>
+            <div class="rmeta">YouTube</div>
+          </div>
+        </li>
+
+        <li class="relatedItem" data-video-id="9C_HReR_McQ">
+          <img src="https://images.squarespace-cdn.com/content/v1/569eeab4a128e6f9904daa89/1543947568466-AEGF6QVYXSITVFVDS6ZJ/download.jpg" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">Don't Hug Me I'm Scared</div>
+            <div class="rmeta">YouTube</div>
+          </div>
+        </li>
+
+        <li class="relatedItem" data-video-id="EIv8Q551NRM">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbTGn8CKk506C4OYp4jvVocIpAihziqmiznWtCckn2Gw&s=10" alt="thumb">
+          <div class="rinfo">
+            <div class="rtitle">Mereana Mordegard Glesgorv</div>
+            <div class="rmeta">YouTube</div>
           </div>
         </li>
       </ul>

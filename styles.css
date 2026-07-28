@@ -71,6 +71,22 @@ body{
   margin-bottom:10px;
 }
 
+.videoContainer{position:relative;display:inline-block}
+.videoContainer iframe{display:block}
+.playOverlay{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:12px 18px;
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  border:0;
+  cursor:pointer;
+  border-radius:4px;
+  font-size:16px;
+}
+
 h1{font-size:18px;margin:6px 0;color:#111}
 
 .meta{
