@@ -104,6 +104,7 @@ body{
   color:#e7f0ff;
 }
 .source{display:block;color:var(--muted);font-size:12px;margin-top:6px}
+.foundby{display:block;color:var(--muted);font-size:12px;margin-top:4px;font-style:italic}
 
 /* Modal */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);z-index:1200}
@@ -111,6 +112,7 @@ body{
 .modal-content{background:var(--panel);padding:18px;border-radius:6px;max-width:90%;max-height:90%;overflow:auto;position:relative}
 .modal-body{display:flex;flex-direction:column;gap:12px;align-items:center}
 .modal-body iframe{max-width:100%;border-radius:4px}
+.modal-foundby{color:var(--muted);font-size:13px;font-style:italic}
 .close{position:absolute;right:20px;top:12px;background:transparent;border:0;color:#fff;font-size:26px;cursor:pointer}
 
 /* small retro noise overlay to add slight unease */

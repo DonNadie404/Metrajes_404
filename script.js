@@ -1,20 +1,20 @@
 // Render the main grid and handle modal playback; prevents duplicate videos
 (function(){
-  // Videos provided earlier by the user (unique list) — updated thumbnail for Username:666 uses original provided thumb
+  // Videos provided earlier by the user (unique list) — each video now has a `foundBy` credit
   const videos = [
-    { id: 'b89CnP0Iq30', title: 'La Caída de Edgar', thumb: 'https://tvazteca.brightspotcdn.com/87/a7/cd0e1101486f8643400312dce073/edgar-se-cae.jpg' },
-    { id: 'HyikGa6hObA', title: 'muñeca mueve cabeza', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd5SPrrnpVE2w-uekr8nOQIAdbHW_0C55tcmlgt-KUgg&s=10' },
-    // Username:666 thumb restored to the original URL provided by you
-    { id: '7iFXyLah2oQ', title: 'Username:666', thumb: 'https://i.ytimg.com/vi/OgfPcfS8s7U/maxresdefault.jpg' },
-    { id: 'VHSdTFbU3Ts', title: '1980s PSA - “We\'re Not Candy!”', thumb: 'https://laughingsquid.com/wp-content/uploads/2014/08/were-not-candy-bizarre-1983-psa.jpg' },
-    { id: '9C_HReR_McQ', title: "Don't Hug Me I'm Scared", thumb: 'https://images.squarespace-cdn.com/content/v1/569eeab4a128e6f9904daa89/1543947568466-AEGF6QVYXSITVFVDS6ZJ/download.jpg' },
-    { id: 'EIv8Q551NRM', title: 'Mereana Mordegard Glesgorv', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbTGn8CKk506C4OYp4jvVocIpAihziqmiznWtCckn2Gw&s=10' }
+    { id: 'b89CnP0Iq30', title: 'La Caída de Edgar', thumb: 'https://tvazteca.brightspotcdn.com/87/a7/cd0e1101486f8643400312dce073/edgar-se-cae.jpg', foundBy: 'DonNadie404' },
+    { id: 'HyikGa6hObA', title: 'muñeca mueve cabeza', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd5SPrrnpVE2w-uekr8nOQIAdbHW_0C55tcmlgt-KUgg&s=10', foundBy: 'DonNadie404' },
+    { id: '7iFXyLah2oQ', title: 'Username:666', thumb: 'https://i.ytimg.com/vi/OgfPcfS8s7U/maxresdefault.jpg', foundBy: 'DonNadie404' },
+    { id: 'VHSdTFbU3Ts', title: '1980s PSA - “We\'re Not Candy!”', thumb: 'https://laughingsquid.com/wp-content/uploads/2014/08/were-not-candy-bizarre-1983-psa.jpg', foundBy: 'DonNadie404' },
+    { id: '9C_HReR_McQ', title: "Don't Hug Me I'm Scared", thumb: 'https://images.squarespace-cdn.com/content/v1/569eeab4a128e6f9904daa89/1543947568466-AEGF6QVYXSITVFVDS6ZJ/download.jpg', foundBy: 'DonNadie404' },
+    { id: 'EIv8Q551NRM', title: 'Mereana Mordegard Glesgorv', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbTGn8CKk506C4OYp4jvVocIpAihziqmiznWtCckn2Gw&s=10', foundBy: 'DonNadie404' }
   ];
 
   const grid = document.getElementById('videosGrid');
   const modal = document.getElementById('videoModal');
   const modalPlayer = document.getElementById('modalPlayer');
   const modalTitle = document.getElementById('modalTitle');
+  const modalFoundBy = document.getElementById('modalFoundBy');
   const closeModal = document.getElementById('closeModal');
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
@@ -40,16 +40,20 @@
     const source = document.createElement('span');
     source.className = 'source';
     source.textContent = 'YouTube';
+    const found = document.createElement('span');
+    found.className = 'foundby';
+    found.textContent = 'Found by: ' + (video.foundBy || 'Unknown');
 
     info.appendChild(title);
     info.appendChild(source);
+    info.appendChild(found);
 
     card.appendChild(thumb);
     card.appendChild(info);
 
     // click opens modal and plays
     card.addEventListener('click', ()=>{
-      openModal(video.id, video.title);
+      openModal(video.id, video.title, video.foundBy);
     });
 
     return card;
@@ -66,10 +70,11 @@
     });
   }
 
-  function openModal(videoId, title){
+  function openModal(videoId, title, foundBy){
     const base = 'https://www.youtube-nocookie.com/embed/';
     modalPlayer.src = base + encodeURIComponent(videoId) + '?rel=0&autoplay=1';
     modalTitle.textContent = title || '';
+    modalFoundBy.textContent = foundBy ? ('Found by: ' + foundBy) : '';
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
