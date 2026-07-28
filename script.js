@@ -1,111 +1,100 @@
-// Interactions updated to support YouTube iframe player and your provided video IDs
+// Render the main grid and handle modal playback; prevents duplicate videos
 (function(){
-  const player = document.getElementById('player'); // iframe
-  const playOverlay = document.getElementById('playOverlay');
-  const viewsEl = document.getElementById('views');
-  const likeBtn = document.getElementById('likeBtn');
-  const dislikeBtn = document.getElementById('dislikeBtn');
-  const commentText = document.getElementById('commentText');
-  const commentList = document.getElementById('commentList');
-  const commentsCount = document.getElementById('commentsCount');
-  const relatedList = document.getElementById('relatedList');
-  const postBtn = document.getElementById('postComment');
-
-  if (!player) return console.warn('Player iframe not found.');
-
-  // Simple state (in-memory)
-  let views = 1234; // initial sample
-  let likes = 45;
-  let dislikes = 2;
-  let liked = false;
-  let disliked = false;
-  let comments = [
-    {author:'Alice', text:'Nice retro demo!', time: new Date().toLocaleString()},
-    {author:'Bob', text:'Brings back memories.', time: new Date().toLocaleString()}
+  // Videos provided earlier by the user (unique list) — updated thumbnail for Username:666 uses YouTube thumbnail
+  const videos = [
+    { id: 'b89CnP0Iq30', title: 'La Caída de Edgar', thumb: 'https://tvazteca.brightspotcdn.com/87/a7/cd0e1101486f8643400312dce073/edgar-se-cae.jpg' },
+    { id: 'HyikGa6hObA', title: 'muñeca mueve cabeza', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd5SPrrnpVE2w-uekr8nOQIAdbHW_0C55tcmlgt-KUgg&s=10' },
+    // Username:666 thumb replaced with YouTube thumbnail for 7iFXyLah2oQ
+    { id: '7iFXyLah2oQ', title: 'Username:666', thumb: 'https://i.ytimg.com/vi/7iFXyLah2oQ/maxresdefault.jpg' },
+    { id: 'VHSdTFbU3Ts', title: '1980s PSA - “We\'re Not Candy!”', thumb: 'https://laughingsquid.com/wp-content/uploads/2014/08/were-not-candy-bizarre-1983-psa.jpg' },
+    { id: '9C_HReR_McQ', title: "Don't Hug Me I'm Scared", thumb: 'https://images.squarespace-cdn.com/content/v1/569eeab4a128e6f9904daa89/1543947568466-AEGF6QVYXSITVFVDS6ZJ/download.jpg' },
+    { id: 'EIv8Q551NRM', title: 'Mereana Mordegard Glesgorv', thumb: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbTGn8CKk506C4OYp4jvVocIpAihziqmiznWtCckn2Gw&s=10' }
   ];
 
-  function renderViews(){ if (viewsEl) viewsEl.textContent = views + ' views'; }
-  function renderButtons(){
-    if (!likeBtn || !dislikeBtn) return;
-    likeBtn.textContent = 'Like (' + likes + ')';
-    dislikeBtn.textContent = 'Dislike (' + dislikes + ')';
-    likeBtn.style.fontWeight = liked ? '700' : '400';
-    dislikeBtn.style.fontWeight = disliked ? '700' : '400';
-  }
-  function renderComments(){
-    if (!commentList || !commentsCount) return;
-    commentList.innerHTML = '';
-    comments.forEach(c=>{
-      const li = document.createElement('li');
-      li.innerHTML = `<span class="commentAuthor">${escapeHtml(c.author)}</span> <span class="commentTime">${escapeHtml(c.time)}</span><div>${escapeHtml(c.text)}</div>`;
-      commentList.appendChild(li);
+  const grid = document.getElementById('videosGrid');
+  const modal = document.getElementById('videoModal');
+  const modalPlayer = document.getElementById('modalPlayer');
+  const modalTitle = document.getElementById('modalTitle');
+  const closeModal = document.getElementById('closeModal');
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+
+  // Helper: create a card element
+  function makeCard(video){
+    const card = document.createElement('article');
+    card.className = 'video-card';
+    card.dataset.videoId = video.id;
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    const img = document.createElement('img');
+    img.src = video.thumb;
+    img.alt = video.title + ' thumbnail';
+    thumb.appendChild(img);
+
+    const info = document.createElement('div');
+    info.className = 'card-info';
+    const title = document.createElement('div');
+    title.className = 'title-badge';
+    title.textContent = video.title;
+    const source = document.createElement('span');
+    source.className = 'source';
+    source.textContent = 'YouTube';
+
+    info.appendChild(title);
+    info.appendChild(source);
+
+    card.appendChild(thumb);
+    card.appendChild(info);
+
+    // click opens modal and plays
+    card.addEventListener('click', ()=>{
+      openModal(video.id, video.title);
     });
-    commentsCount.textContent = comments.length;
+
+    return card;
   }
 
-  // Helper: set iframe to a YouTube video ID and optionally autoplay
-  function setYouTubeVideo(videoId, autoplay){
-    if (!videoId) return;
+  // Render unique videos into the grid (no duplicates by video id)
+  function renderGrid(list){
+    grid.innerHTML = '';
+    const seen = new Set();
+    list.forEach(v=>{
+      if (seen.has(v.id)) return; // skip duplicates
+      seen.add(v.id);
+      grid.appendChild(makeCard(v));
+    });
+  }
+
+  function openModal(videoId, title){
     const base = 'https://www.youtube-nocookie.com/embed/';
-    const params = '?rel=0';
-    const auto = autoplay ? '&autoplay=1' : '';
-    player.src = base + encodeURIComponent(videoId) + params + auto;
+    modalPlayer.src = base + encodeURIComponent(videoId) + '?rel=0&autoplay=1';
+    modalTitle.textContent = title || '';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
   }
 
-  // Play overlay: when clicked, start playback with autoplay and count as a view
-  if (playOverlay){
-    playOverlay.addEventListener('click', ()=>{
-      // if the iframe already had autoplay, this will still refresh it
-      // set autoplay and increment views
-      const srcId = (player.src || '').split('/embed/')[1] || '';
-      const vid = srcId.split('?')[0];
-      setYouTubeVideo(vid, true);
-      views++;
-      renderViews();
-      playOverlay.style.display = 'none';
-    });
+  function close(){
+    modalPlayer.src = '';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
 
-  // related video clicking: swap iframe src to the selected YouTube ID and autoplay
-  if (relatedList) relatedList.addEventListener('click', (e)=>{
-    const item = e.target.closest('.relatedItem');
-    if(!item) return;
-    const vid = item.dataset.videoId;
-    if (vid){
-      setYouTubeVideo(vid, true);
-      // update title
-      const rtitle = item.querySelector('.rtitle');
-      if (rtitle) document.getElementById('videoTitle').textContent = rtitle.textContent;
-      views = Math.floor(Math.random()*50000);
-      renderViews();
-      if (playOverlay) playOverlay.style.display = 'none';
-    }
-  });
+  closeModal.addEventListener('click', close);
+  modal.addEventListener('click', (e)=>{ if (e.target === modal) close(); });
 
-  if (likeBtn) likeBtn.addEventListener('click', ()=>{
-    if(liked){ likes--; liked=false; }
-    else { likes++; if(disliked){ disliked=false; dislikes--; } liked=true; }
-    renderButtons();
-  });
+  // Search filtering (simple case-insensitive title match)
+  function doSearch(){
+    const q = (searchInput.value || '').trim().toLowerCase();
+    if (!q) return renderGrid(videos);
+    const filtered = videos.filter(v => v.title.toLowerCase().includes(q));
+    renderGrid(filtered);
+  }
 
-  if (dislikeBtn) dislikeBtn.addEventListener('click', ()=>{
-    if(disliked){ dislikes--; disliked=false; }
-    else { dislikes++; if(liked){ liked=false; likes--; } disliked=true; }
-    renderButtons();
-  });
+  searchBtn.addEventListener('click', doSearch);
+  searchInput.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') doSearch(); });
 
-  if (postBtn) postBtn.addEventListener('click', ()=>{
-    const txt = (commentText && commentText.value || '').trim();
-    if(!txt) return alert('Comment cannot be empty.');
-    comments.unshift({author:'You', text: txt, time: new Date().toLocaleString()});
-    if (commentText) commentText.value = '';
-    renderComments();
-  });
-
-  function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-  renderViews();
-  renderButtons();
-  renderComments();
+  // initial render
+  renderGrid(videos);
 
 })();
